@@ -53,15 +53,16 @@ const signIn = async (req, res) => {
 
 const getDashboard=async(req,res)=>{
   try{
-    const users=await Users.countDocuments({isDeleted:0})
-    const services=await Services.countDocuments({});
+    const usersCount=await Users.countDocuments({isDeleted:0})
+    const servicesCount=await Services.countDocuments({});
     const bookedServices=await BookServices.countDocuments({});
+    // const users=await Users.find({isDeleted:0});
     return res.status(200).send({
       status:1,
       message:"sucesss",
       data:{
-        users:users,
-        services:services,
+        usersCount:usersCount,
+        servicesCount:servicesCount,
         bookedServices:bookedServices
       }
     });
