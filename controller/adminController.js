@@ -6,6 +6,8 @@ const bcrypt = require("bcrypt");
 const main = require("../index.js");
 const { pushNotifications } = require("../utils/utils");
 const moment = require("moment");
+const Services=mongoose.model("service");
+const BookServices=mongoose.model("bookService")
 
 //done
 const signIn = async (req, res) => {
@@ -48,6 +50,25 @@ const signIn = async (req, res) => {
     return res.status(500).send({ status: 0, message: "Something went wrong" });
   }
 };
+
+const getDashboard=async(req,res)=>{
+  try{
+    const users=await Users.countDocuments({isDeleted:0})
+    const services=await Services.countDocuments({});
+    const bookedServices=await BookServices.countDocuments({});
+    return res.status(200).send({
+      status:1,
+      message:"sucesss",
+      data:{
+        users:users,
+        services:services,
+        bookedServices:bookedServices
+      }
+    });
+  }catch(err){
+    return res.status(500).send({ status: 0, message: "Something went wrong" });
+  }
+}
 
 //done
 const signOut = async (req, res) => {
@@ -330,4 +351,5 @@ module.exports = {
   blockunblock,
   TcandPp,
   getTcandPp,
+  getDashboard
 };

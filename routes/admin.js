@@ -7,6 +7,7 @@ const {
   getAllUsers,
   deleteAccount,
   blockunblock,
+  getDashboard
 } = require("../controller/adminController");
 const authAdmin = require("../middleware/authAdmin");
 const { upload } = require("../middleware/multer");
@@ -15,6 +16,7 @@ const { editContent } = require("../controller/ContentController");
 
 router.post("/admin/signin", signIn);
 router.post("/admin/signout", authAdmin, signOut);
+router.get("/admin/dashboard-data",authAdmin, getDashboard)
 router.post("/admin/changePassword", authAdmin, updatePassword);
 router.get("/admin/getAllUsers", authAdmin, getAllUsers);
 router.delete("/admin/deleteAccount", authAdmin, deleteAccount);
