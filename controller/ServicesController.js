@@ -143,7 +143,8 @@ const getAllServices = async (req, res) => {
       limit && !isNaN(parseInt(limit)) && parseInt(limit) > 0
         ? parseInt(limit)
         : Number.MAX_SAFE_INTEGER;
-    const startIndex = (page - 1) * limit;
+    const startIndex = (page - 1) * effectiveLimit;
+    // console.log("effectiveLimit",startIndex)
     const totalServices = await Service.countDocuments({});
     const services = await Service.aggregate([
       {
