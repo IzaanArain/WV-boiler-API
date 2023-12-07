@@ -210,7 +210,7 @@ const deleteAccount = async (req, res) => {
 // // not working
 const blockunblock = async (req, res) => {
   try {
-    const _id = req?.query?.id;
+    const _id = req?.body?.id;
     if (!_id) {
       return res.status(400).send({
         status: 0,
