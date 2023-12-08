@@ -52,17 +52,18 @@ const editService = async (req, res) => {
         status: 0,
         message: "please enter a valid ID",
       });
-    } else if (!title) {
-      return res.status(400).send({
-        status: 0,
-        message: "please enter title",
-      });
-    } else if (!content) {
-      return res.status(400).send({
-        status: 0,
-        message: "please enter content",
-      });
-    }
+    } 
+    // else if (!title) {
+    //   return res.status(400).send({
+    //     status: 0,
+    //     message: "please enter title",
+    //   });
+    // } else if (!content) {
+    //   return res.status(400).send({
+    //     status: 0,
+    //     message: "please enter content",
+    //   });
+    // }
     const service = await Service.findById(id);
     if (!service) {
       return res.status(400).send({
