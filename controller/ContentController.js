@@ -32,7 +32,7 @@ const getContent = async (req, res) => {
       return res.status(200).send({
         status: 1,
         message: `fetched ${type} successfully`,
-        content,
+        data:{url:``,content},
       });
     }
   } catch (err) {
@@ -43,6 +43,30 @@ const getContent = async (req, res) => {
     });
   }
 };
+
+const getInformation=async(req,res)=>{
+  try{
+    const content=await TcPp.findOne({ contentType: "information"});
+    if (!content) {
+      return res.status(400).send({
+        status: 0,
+        message: "content not found",
+      });
+    } else {
+      return res.status(200).send({
+        status: 1,
+        message: `fetched information successfully`,
+       data:content
+      });
+    }
+  }catch(err){
+    console.error("error", err.message);
+    return res.status(500).send({
+      status: 0,
+      message: "Something went wrong",
+    });
+  }
+}
 
 const getAllContent = async (req, res) => {
   try {
@@ -56,7 +80,7 @@ const getAllContent = async (req, res) => {
       return res.status(200).send({
         status: 1,
         message: `fetched content successfully`,
-        content,
+        data:{content},
       });
     }
   } catch (err) {
@@ -112,7 +136,7 @@ const editContent = async (req, res) => {
     return res.status(200).send({
       status: 1,
       message: "content updated successfully!",
-      content: updateContent,
+      data:{content: updateContent},
     });
   } catch (err) {
     console.error("error", err.message);
