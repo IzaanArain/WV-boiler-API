@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const TcPp = mongoose.model("TcPp");
+const main = require("../index");
 
 const getContent = async (req, res) => {
   try {
@@ -29,7 +30,7 @@ const getContent = async (req, res) => {
         message: "content not found",
       });
     } else {
-      contentType=content?.contentType;
+      contentType = content?.contentType;
       return res.status(200).send({
         status: 1,
         message: `fetched ${type} successfully`,
@@ -145,6 +146,8 @@ const editContent = async (req, res) => {
       status: 0,
       message: "Something went wrong",
     });
+  } finally {
+    main.dbSeed();
   }
 };
 
