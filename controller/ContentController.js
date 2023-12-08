@@ -1,9 +1,9 @@
-const mongoose=require("mongoose")
+const mongoose = require("mongoose");
 const TcPp = mongoose.model("TcPp");
 
 const getContent = async (req, res) => {
   try {
-    const type = req?.body?.type;
+    const type = req?.query?.type;
     const types = [
       "privacy_policy",
       "terms_and_conditions",
@@ -29,10 +29,11 @@ const getContent = async (req, res) => {
         message: "content not found",
       });
     } else {
+      contentType=content?.contentType;
       return res.status(200).send({
         status: 1,
         message: `fetched ${type} successfully`,
-        data:{url:``,content},
+        data: { url: `${process.env.URL}${contentType}`, content },
       });
     }
   } catch (err) {
@@ -44,9 +45,9 @@ const getContent = async (req, res) => {
   }
 };
 
-const getInformation=async(req,res)=>{
-  try{
-    const content=await TcPp.findOne({ contentType: "information"});
+const getInformation = async (req, res) => {
+  try {
+    const content = await TcPp.findOne({ contentType: "information" });
     if (!content) {
       return res.status(400).send({
         status: 0,
@@ -56,17 +57,17 @@ const getInformation=async(req,res)=>{
       return res.status(200).send({
         status: 1,
         message: `fetched information successfully`,
-       data:content
+        data: content,
       });
     }
-  }catch(err){
+  } catch (err) {
     console.error("error", err.message);
     return res.status(500).send({
       status: 0,
       message: "Something went wrong",
     });
   }
-}
+};
 
 const getAllContent = async (req, res) => {
   try {
@@ -80,7 +81,7 @@ const getAllContent = async (req, res) => {
       return res.status(200).send({
         status: 1,
         message: `fetched content successfully`,
-        data:{content},
+        data: { content },
       });
     }
   } catch (err) {
@@ -129,14 +130,14 @@ const editContent = async (req, res) => {
       {
         title,
         content,
-        companyImage:contentImagePath
+        companyImage: contentImagePath,
       },
       { new: true }
     );
     return res.status(200).send({
       status: 1,
       message: "content updated successfully!",
-      data:{content: updateContent},
+      data: { content: updateContent },
     });
   } catch (err) {
     console.error("error", err.message);
@@ -147,4 +148,4 @@ const editContent = async (req, res) => {
   }
 };
 
-module.exports = { getContent,editContent,getAllContent, getInformation };
+module.exports = { getContent, editContent, getAllContent, getInformation };
