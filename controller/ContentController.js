@@ -147,4 +147,4 @@ const editContent = async (req, res) => {
   }
 };
 
-module.exports = { getContent,editContent,getAllContent };
+module.exports = { getContent,editContent,getAllContent, getInformation };
