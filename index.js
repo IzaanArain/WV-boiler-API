@@ -124,7 +124,7 @@ var abc;
 const dbSeed = async () => {
   try {
     const findTcPp = await TcPp.find({});
-    if (findTcPp.length < 1) {
+    if (findTcPp?.length < 1) {
       const pp = await TcPp.find({ contentType: "privacy_policy" });
       if (pp.length > 1 || pp.length < 1) {
         await TcPp.deleteMany({ type: "privacy_policy" });
@@ -154,36 +154,37 @@ const dbSeed = async () => {
 };
 dbSeed();
 app.set("views", "./views");
-app.set("view engine", "pug");
-app.get("/privacy_policy*", (req, res, next) => {
-  res.render("index", {
-    title: "Privacy Policy",
-    heading: "Privacy Policy",
-    paragraph: abc[0]?.content,
-  });
-});
-app.get("/about_us*", (req, res, next) => {
-  res.render("index", {
-    title: "About Us",
-    heading: "About Us",
-    paragraph: abc[1]?.content,
-  });
-});
-app.get("/terms_and_conditions*", (req, res, next) => {
-  res.render("index", {
-    title: "Terms And Conditions",
-    heading: "Terms And Conditions",
-    paragraph: abc[2]?.content,
-  });
-});
+    app.set("view engine", "pug");
 
-app.get("/information*", (req, res, next) => {
-  res.render("index", {
-    title: "Information",
-    heading: "Information",
-    paragraph: abc[3]?.content,
-  });
-});
+    app.get("/privacy_policy*", (req, res, next) => {
+      res.render("index", {
+        title: "Privacy Policy",
+        heading: "Privacy Policy",
+        paragraph: abc ? abc[0].content : contentSeeder[0].content,
+      });
+    });
+    app.get("/about_us*", (req, res, next) => {
+      res.render("index", {
+        title: "About Us",
+        heading: "About Us",
+        paragraph: abc ? abc[1].content : contentSeeder[1].content,
+      });
+    });
+    app.get("/terms_and_conditions*", (req, res, next) => {
+      res.render("index", {
+        title: "Terms And Conditions",
+        heading: "Terms And Conditions",
+        paragraph: abc ? abc[2].content : contentSeeder[2].content,
+      });
+    });
+
+    app.get("/information*", (req, res, next) => {
+      res.render("index", {
+        title: "Information",
+        heading: "Information",
+        paragraph: abc ? abc[2].content : contentSeeder[3].content,
+      });
+    });
 // cronJob()
 const PORT = process.env.PORT || 3002;
 server.listen(PORT, (req, res) => {
