@@ -442,6 +442,33 @@ const getServiceBookings=async(req,res)=>{
         $match:{
           serviceId:new mongoose.Types.ObjectId(id)
         }
+      },
+      {
+        $lookup:{
+          from:"users",
+          localField:"userId",
+          foreignField:"_id",
+          as:"user"
+        }
+      },
+      {
+        $unwind:{
+          path:"$user"
+        }
+      },
+      {
+        $addFields:{
+          name:"$user.name",
+          email:"$user.email",
+          phone:"$user.phone",
+          socialPhone:"$user.socialPhone",
+          profileImage:"$user.profileImage",
+          isBlocked:"$user.isBlocked",
+          isDeleted:"$user.isDeleted"
+        }
+      },
+      {
+        $unset:["user"]
       }
     ]);
     return res.status(200).send({
