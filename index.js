@@ -182,7 +182,7 @@ app.set("views", "./views");
       res.render("index", {
         title: "Information",
         heading: "Information",
-        paragraph: abc ? abc[2].content : contentSeeder[3].content,
+        paragraph: abc ? abc[3].content : contentSeeder[3].content,
       });
     });
 // cronJob()
