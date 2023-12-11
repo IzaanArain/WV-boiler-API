@@ -11,7 +11,7 @@ const {
 } = require("../controller/adminController");
 const authAdmin = require("../middleware/authAdmin");
 const { upload } = require("../middleware/multer");
-const { createService, editService, deleteService, getAllServices, getServiceDetails} = require("../controller/ServicesController");
+const { createService, editService, deleteService, getAllServices, getServiceDetails,getServiceBookings} = require("../controller/ServicesController");
 const { editContent } = require("../controller/ContentController");
 
 router.post("/admin/signin", signIn);
@@ -28,5 +28,6 @@ router.get("/admin/getServiceDetails",authAdmin,getServiceDetails);
 router.post("/admin/createService",authAdmin,upload.fields([{name:"serviceImage",maxCount:1}]),createService);
 router.post("/admin/editService",authAdmin,upload.fields([{name:"serviceImage",maxCount:1}]),editService);
 router.delete("/admin/deleteService",authAdmin,deleteService);
+router.get("/admin/allServiceBookings",authAdmin,getServiceBookings);
 
 module.exports = router;

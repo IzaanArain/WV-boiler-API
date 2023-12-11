@@ -423,6 +423,40 @@ const bookService = async (req, res) => {
   }
 };
 
+const getServiceBookings=async(req,res)=>{
+  try{
+    const id=req?.query?.id;
+    if (!id) {
+      return res.status(400).send({
+        status: 0,
+        message: "please enter ID",
+      });
+    } else if (!mongoose.isValidObjectId(id)) {
+      return res.status(400).send({
+        status: 0,
+        message: "please enter a valid ID",
+      });
+    }
+    const bookings=await BookService.aggregate([
+      {
+        $match:{
+          serviceId:new mongoose.Types.ObjectId(id)
+        }
+      }
+    ]);
+    return res.status(200).send({
+      status:1,
+      message:"fetched all service bookings successfully",
+      data:bookings
+    })
+  }catch(err){
+    return res.status(500).send({
+      status: 0,
+      message: "Something went wrong",
+    });
+  }
+}
+
 const unBookService = async (req, res) => {
   try {
     const userId = req?.user?._id;
@@ -477,4 +511,5 @@ module.exports = {
   getServiceDetails,
   bookService,
   unBookService,
+  getServiceBookings
 };
