@@ -3,7 +3,7 @@ const router = express.Router();
 const { signIn, signUp, verifyAccount, resendOTP, forgetPassword, resetPassword, signOut, socialLogin, editProfile, updatePassword, notificationToggle, deleteAccount, recoverAccount, completeProfile } = require("../controller/commonController");
 const authUser = require('../middleware/authUser');
 const { upload } = require('../middleware/multer');
-const { getContent, getAllContent } = require('../controller/ContentController');
+const { getContent, getAllContent,getInformation } = require('../controller/ContentController');
 
 // router.post('/api/signup', signUp)
 // router.post('/api/completeProfile/:id', upload.fields([{ name: 'profileImage', maxCount: 1 }, { name: 'otherImages' }]), completeProfile)
@@ -23,4 +23,5 @@ const { getContent, getAllContent } = require('../controller/ContentController')
 
 router.get("/api/getTcPp",getContent);
 router.get("/api/getAllTcPp",getAllContent);
+router.get("/api/getInformation",getInformation);
 module.exports = router
