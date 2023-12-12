@@ -181,7 +181,7 @@ app.set("views", "./views");
     app.get("/information*", (req, res, next) => {
       res.render("index", {
         title: "Information",
-        heading: "Information",
+        heading: abc ? abc[3].title : contentSeeder[3].title,
         paragraph: abc ? abc[3].content : contentSeeder[3].content,
       });
     });
