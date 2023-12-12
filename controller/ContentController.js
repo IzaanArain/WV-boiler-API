@@ -122,10 +122,13 @@ const editContent = async (req, res) => {
         message: "content not found",
       });
     }
+    let  contentImagePath=""
     const contentImage = req?.files?.companyImage;
-    const contentImagePath = contentImage
-      ? contentImage[0]?.path?.replace(/\\/g, "/")
-      : null;
+    if(contentImage){
+      contentImagePath=contentImage[0]?.path?.replace(/\\/g, "/")
+    }else{
+      contentImagePath=contentExists?.companyImage;
+    }
     const updateContent = await TcPp.findOneAndUpdate(
       { contentType: type },
       {

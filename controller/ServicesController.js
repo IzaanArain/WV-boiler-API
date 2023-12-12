@@ -72,9 +72,12 @@ const editService = async (req, res) => {
       });
     }
     const serviceImage = req?.files?.serviceImage;
-    const serviceImagePath = serviceImage
-      ? serviceImage[0]?.path?.replace(/\\/g, "/")
-      : null;
+    let serviceImagePath="";
+    if(serviceImage){
+    serviceImagePath = serviceImage[0]?.path?.replace(/\\/g, "/")
+    }else{
+      serviceImagePath=service?. serviceImage;
+    }
     // console.log(serviceImagePath)
     const updateService = await Service.findByIdAndUpdate(
       id,
