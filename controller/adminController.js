@@ -56,10 +56,30 @@ const getDashboard = async (req, res) => {
     const usersCount = await Users.countDocuments({ isDeleted: 0 });
     const servicesCount = await Services.countDocuments({});
     const bookedServices = await BookServices.countDocuments({});
+    const currentyear=new Date().getFullYear()
+    const startDate=new Date(`${currentyear}-01-01`);
+    const endDate=new Date(`${currentyear+1}-01-01`);
+    const users=await Users.find({});
     
+    // const users=await Users.aggregate([
+    //   {
+    //     $match:{
+    //       isDeleted:0,
+    //       createdAt:{$gte:startDate,$lt:endDate}
+    //     }
+    //   },
+    //   // {
+    //   //   $group: {
+    //   //     _id: { $month: "$createdAt" },
+    //   //     count: { $sum: 1 },
+    //   //   },
+    //   // },
+    // ]);
+
     return res.status(200).send({
       status: 1,
       message: "sucesss",
+      users,
       data: {
         usersCount: usersCount,
         servicesCount: servicesCount,
