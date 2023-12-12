@@ -56,7 +56,6 @@ const getDashboard=async(req,res)=>{
     const usersCount=await Users.countDocuments({isDeleted:0})
     const servicesCount=await Services.countDocuments({});
     const bookedServices=await BookServices.countDocuments({});
-    // const users=await Users.find({isDeleted:0});
     return res.status(200).send({
       status:1,
       message:"sucesss",
