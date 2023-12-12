@@ -6,8 +6,8 @@ const bcrypt = require("bcrypt");
 const main = require("../index.js");
 const { pushNotifications } = require("../utils/utils");
 const moment = require("moment");
-const Services=mongoose.model("service");
-const BookServices=mongoose.model("bookService")
+const Services = mongoose.model("service");
+const BookServices = mongoose.model("bookService");
 
 //done
 const signIn = async (req, res) => {
@@ -51,25 +51,25 @@ const signIn = async (req, res) => {
   }
 };
 
-const getDashboard=async(req,res)=>{
-  try{
-    const usersCount=await Users.countDocuments({isDeleted:0})
-    const servicesCount=await Services.countDocuments({});
-    const bookedServices=await BookServices.countDocuments({});
+const getDashboard = async (req, res) => {
+  try {
+    const usersCount = await Users.countDocuments({ isDeleted: 0 });
+    const servicesCount = await Services.countDocuments({});
+    const bookedServices = await BookServices.countDocuments({});
     
     return res.status(200).send({
-      status:1,
-      message:"sucesss",
-      data:{
-        usersCount:usersCount,
-        servicesCount:servicesCount,
-        bookedServices:bookedServices
-      }
+      status: 1,
+      message: "sucesss",
+      data: {
+        usersCount: usersCount,
+        servicesCount: servicesCount,
+        bookedServices: bookedServices,
+      },
     });
-  }catch(err){
+  } catch (err) {
     return res.status(500).send({ status: 0, message: "Something went wrong" });
   }
-}
+};
 
 //done
 const signOut = async (req, res) => {
@@ -117,11 +117,14 @@ const updatePassword = async (req, res) => {
       return res
         .status(400)
         .send({ status: 0, message: "Confirm New Password Is Required" });
-    }
-    else if (newPassword.length < 6) {
-      return res.status(400).send({ status: 0, message: "Password Should Be 6 Character Long" });
+    } else if (newPassword.length < 6) {
+      return res
+        .status(400)
+        .send({ status: 0, message: "Password Should Be 6 Character Long" });
     } else if (confirmNewPassword.length < 6) {
-      return res.status(400).send({ status: 0, message: "Password Should Be 6 Character Long" });
+      return res
+        .status(400)
+        .send({ status: 0, message: "Password Should Be 6 Character Long" });
     }
     // else if (!newPassword.match(passwordValidation)) {
     //   return res.status(400).send({
@@ -129,7 +132,7 @@ const updatePassword = async (req, res) => {
     //     message:
     //       "Password should include at least 8 characters, one uppercase letter, one lowercase letter, one digit, and one special character.",
     //   });
-    // } 
+    // }
     else if (newPassword !== confirmNewPassword) {
       return res.status(400).send({
         status: 0,
@@ -223,11 +226,11 @@ const blockunblock = async (req, res) => {
       });
     }
     const checkUser = await Users.findOne({ _id });
-    if (checkUser.isBlocked===1) {
+    if (checkUser.isBlocked === 1) {
       const user = await Users.findByIdAndUpdate(
         { _id },
         { $set: { isBlocked: 0 } },
-        {new:true}
+        { new: true }
       );
 
       if (user) {
@@ -239,7 +242,7 @@ const blockunblock = async (req, res) => {
       const user = await Users.findByIdAndUpdate(
         { _id },
         { $set: { isBlocked: 1 } },
-        {new:true}
+        { new: true }
       );
       if (user) {
         await Users.findOneAndUpdate(
@@ -339,9 +342,7 @@ const getTcandPp = async (req, res) => {
   } catch (err) {
     return res.status(500).send({ status: 0, message: "Something went wrong" });
   }
-}; 
-
-
+};
 
 module.exports = {
   signIn,
@@ -352,5 +353,5 @@ module.exports = {
   blockunblock,
   TcandPp,
   getTcandPp,
-  getDashboard
+  getDashboard,
 };
