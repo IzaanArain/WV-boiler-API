@@ -89,7 +89,7 @@ const getDashboard = async (req, res) => {
       };
     });
     // monthly services
-    const services=await Services.aggregate([
+    const services=await BookServices.aggregate([
       {
         $match: {
           createdAt: { $gte: startDate, $lt: endDate },
