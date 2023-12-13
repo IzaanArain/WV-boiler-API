@@ -56,30 +56,95 @@ const getDashboard = async (req, res) => {
     const usersCount = await Users.countDocuments({ isDeleted: 0 });
     const servicesCount = await Services.countDocuments({});
     const bookedServices = await BookServices.countDocuments({});
-    const currentyear=new Date().getFullYear()
-    const startDate=new Date(`${currentyear}-01-01`);
-    const endDate=new Date(`${currentyear+1}-01-01`);
-    const users=await Users.find({});
-    
-    // const users=await Users.aggregate([
-    //   {
-    //     $match:{
-    //       isDeleted:0,
-    //       createdAt:{$gte:startDate,$lt:endDate}
+    const currentyear = new Date().getFullYear();
+    const startDate = new Date(`${currentyear}-01-01`);
+    const endDate = new Date(`${currentyear + 1}-01-01`);
+    // const users = await Users.find({});
+    // const months = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+    const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+    // monthly users
+    const users = await Users.aggregate([
+      {
+        $match: {
+          isDeleted: 0,
+          createdAt: { $gte: startDate, $lt: endDate },
+        },
+      },
+      {
+        $group: {
+          _id: { $month: "$createdAt" },
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+    const monthlyCount = months.map((month) => {
+      let monthData = users.find((user) => {
+        if (user._id === month) {
+          return user;
+        }
+      });
+      return {
+        month: `${currentyear}-${month}`,
+        users: monthData ? monthData.count : 0,
+      };
+    });
+    // monthly services
+    const services=await Services.aggregate([
+      {
+        $match: {
+          createdAt: { $gte: startDate, $lt: endDate },
+        },
+      },
+      {
+        $group: {
+          _id: { $month: "$createdAt" },
+          count: { $sum: 1 },
+        },
+      },
+    ])
+    const monthlyServiceCount = months.map((month) => {
+      let monthData = services.find((service) => {
+        if (service._id === month) {
+          return service;
+        }
+      });
+      return {
+        month: `${currentyear}-${month}`,
+        services: monthData ? monthData.count : 0,
+      };
+    });
+    // const monthlyCount=months.map((month)=>{
+    //   let count=0
+    //   users.forEach((user)=>{
+    //     const userMonth = new Date(user.createdAt).getMonth();
+    //     if(month===userMonth){
+    //       count++
     //     }
-    //   },
-    //   // {
-    //   //   $group: {
-    //   //     _id: { $month: "$createdAt" },
-    //   //     count: { $sum: 1 },
-    //   //   },
-    //   // },
-    // ]);
+    //   })
+    //   return { month: `${currentyear}-${month+1}`, users: count }
+    // });
+
+    // const monthlyCount = [];
+    // for (let i = 0; i < months.length; i++) {
+    //   let count = 0;
+    //   for (let j = 0; j < users.length; j++) {
+    //     const userMonth = new Date(users[j].createdAt).getMonth();
+    //     if (months[i] === userMonth) {
+    //       //  count=count+1
+    //       count++;
+    //     }
+    //     // if(moment(months[i]+1,"M").month()===moment(users[j].createdAt).month()){
+    //     //   count++
+    //     // }
+    //   }
+    //   montlyCount.push({ month: `${currentyear}-${months[i]}`, users: count });
+    // };
 
     return res.status(200).send({
       status: 1,
       message: "sucesss",
-      users,
+      users: monthlyCount,
+      services:monthlyServiceCount,
       data: {
         usersCount: usersCount,
         servicesCount: servicesCount,
@@ -87,7 +152,9 @@ const getDashboard = async (req, res) => {
       },
     });
   } catch (err) {
-    return res.status(500).send({ status: 0, message: "Something went wrong" });
+    return res
+      .status(500)
+      .send({ status: 0, message: "Something went wrong", err: err.message });
   }
 };
 
