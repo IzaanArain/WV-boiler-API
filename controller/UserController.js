@@ -219,7 +219,7 @@ const signin = async (req, res) => {
 
 const socialLogin = async (req, res) => {
   try {
-    const { socialPhone, deviceToken, deviceType, socialToken, socialType } =
+    const { socialPhone, deviceToken, deviceType, socialToken, socialType, name, email } =
       req.body;
     if (!socialType) {
       return res.status(400).send({
@@ -245,14 +245,15 @@ const socialLogin = async (req, res) => {
     const user = await User.findOne({ socialToken: socialToken });
     if (!user) {
       const new_user = new User({
-        socialPhone,
+        phone:socialPhone,
         socialToken,
         socialType,
         deviceToken,
         deviceType,
+        name,
+        email
       });
       await new_user.save();
-      console.log(new_user);
       new_user.isVerified = 1;
       await new_user?.generateAuthToken();
       return res.status(200).send({
